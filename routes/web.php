@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function() {
-    return view('welcome');
+Route::get('home', function () {
+    $name = 'TMH';
+    $age = 20;
+
+    return view('pages.home', compact('name', 'age'));
 });
