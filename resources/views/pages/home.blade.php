@@ -1,1 +1,0 @@
-<h1>Welcome {!! $name !!} who age is {{ $age }}</h1>

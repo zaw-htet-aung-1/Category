@@ -30,4 +30,13 @@
 
 ## Homework
 
-- Edit, Delete
+```
+Category CRUD -> route, controller, model, migration, validation, view
+
+# DB Table Design
+categories
+- id (bigint, auto increment)
+- name (string)
+- created_at (timestamp)
+- updated_at (timestamp)
+```
