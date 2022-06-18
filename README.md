@@ -17,6 +17,8 @@
 ## Auth
 
 - Auth::attempt()
+- Auth::login($user)
+- Auth::loginUsingId(4)
 - Auth::check()
 - Auth::user()
 - Auth::id()
