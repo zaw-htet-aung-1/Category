@@ -41,12 +41,6 @@
 ## Homework
 
 ```
-Category CRUD -> route, controller, model, migration, validation, view
-
-# DB Table Design
-categories
-- id (bigint, auto increment)
-- name (string)
-- created_at (timestamp)
-- updated_at (timestamp)
+Login, Register - Validate and show old value
+change logout method get to post
 ```
