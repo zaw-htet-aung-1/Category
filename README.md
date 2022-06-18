@@ -14,6 +14,14 @@
 - php artisan route:list
 - php artisan make:request PostRequest
 
+## Auth
+
+- Auth::attempt()
+- Auth::check()
+- Auth::user()
+- Auth::id()
+- Auth::logout()
+
 ## Learning
 
 - Route
