@@ -1,8 +1,6 @@
 @extends('layouts.master')
 
-@section('title')
-    {{ $post->title }}
-@endsection
+@section('title', $post->title)
 
 @section('content')
 <div class="card">

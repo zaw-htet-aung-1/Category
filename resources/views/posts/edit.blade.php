@@ -1,8 +1,6 @@
 @extends('layouts.master')
 
-@section('title')
-    Edit Post
-@endsection
+@section('title', 'Edit Post')
 
 @section('content')
 <div class="card">
