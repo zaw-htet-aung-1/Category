@@ -30,6 +30,7 @@
             {{-- {{ $post->created_at->toFormattedDateString() }} by Mark --}}
             {{ $post->created_at->diffForHumans() }} by Mark
             <p>{{ $post->body }}</p>
+            @auth
             <div class="d-flex justify-content-end">
                 <a href="/posts/{{ $post->id }}/edit/" class="btn btn-outline-success">Edit</a>
                 <form action="/posts/{{ $post->id }}"
@@ -41,6 +42,7 @@
                     <button type="submit" class="btn btn-outline-danger ms-2">Delete</button>
                 </form>
             </div>
+            @endauth
         </div>
     
         <hr>

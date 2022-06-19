@@ -38,6 +38,15 @@
 - $post->created_at->toFormattedDateString() 
 - $post->created_at->diffForHumans()
 
+## Route
+
+- CRUD Method (get, post, put, patch, delete)
+- redirect
+- view
+- where (regular expression)
+- middleware
+- name route
+
 ## Learning
 
 - Route
