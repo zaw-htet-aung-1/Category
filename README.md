@@ -24,6 +24,20 @@
 - Auth::id()
 - Auth::logout()
 
+## Request
+
+- $request->all()
+- $request->only()
+- $request->except()
+
+## Carbon
+
+- $post->created_at->format('M d, Y') 
+- $post->created_at->toDateString() 
+- $post->created_at->toDateTimeString() 
+- $post->created_at->toFormattedDateString() 
+- $post->created_at->diffForHumans()
+
 ## Learning
 
 - Route

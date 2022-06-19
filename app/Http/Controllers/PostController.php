@@ -60,10 +60,14 @@ class PostController extends Controller
         // $post->updated_at = now();
         // $post->save();
 
-        Post::create([
-            'title' =>  $request->title,
-            'body' =>  $request->body,
-        ]);
+       
+
+        // Post::create([
+        //     'title' =>  $request->title,
+        //     'body' =>  $request->body,
+        // ]);
+
+        Post::create($request->only(['title', 'body']));
 
         // $request->session()->flash('success', 'A post was created successfully.');
         // session()->flash('success', 'A post was created successfully.');
@@ -98,10 +102,11 @@ class PostController extends Controller
         // $post->updated_at = now();
         // $post->save();
 
-        $post->update([
-            'title' => $request->title,
-            'body' => $request->body,
-        ]);
+        // $post->update([
+        //     'title' => $request->title,
+        //     'body' => $request->body,
+        // ]);
+        $post->update($request->only(['title', 'body']));
 
         // session()->flash('success', 'A post was updated successfully.');
 
