@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use  App\Http\Requests\RegisterRequest;
 
 class RegisterController extends Controller
 {
@@ -12,7 +13,7 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    public function store(Request $request)
+    public function store(RegisterRequest $request)
     {
         $user = new User();
         $user->name = $request->name;
