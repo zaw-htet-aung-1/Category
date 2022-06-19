@@ -51,14 +51,19 @@ class PostController extends Controller
         // $request->all();
         // request('title')
 
-        $post = new Post();
-        // $post->title = request('title');
-        // $post->body = request('body');
-        $post->title = $request->title;
-        $post->body = $request->body;
-        $post->created_at = now();
-        $post->updated_at = now();
-        $post->save();
+        // $post = new Post();
+        // // $post->title = request('title');
+        // // $post->body = request('body');
+        // $post->title = $request->title;
+        // $post->body = $request->body;
+        // $post->created_at = now();
+        // $post->updated_at = now();
+        // $post->save();
+
+        Post::create([
+            'title' =>  $request->title,
+            'body' =>  $request->body,
+        ]);
 
         // $request->session()->flash('success', 'A post was created successfully.');
         // session()->flash('success', 'A post was created successfully.');
@@ -88,10 +93,15 @@ class PostController extends Controller
         $post = Post::find($id);
         // $post->title = request('title');
         // $post->body = request('body');
-        $post->title = $request->title;
-        $post->body = $request->body;
-        $post->updated_at = now();
-        $post->save();
+        // $post->title = $request->title;
+        // $post->body = $request->body;
+        // $post->updated_at = now();
+        // $post->save();
+
+        $post->update([
+            'title' => $request->title,
+            'body' => $request->body,
+        ]);
 
         // session()->flash('success', 'A post was updated successfully.');
 
