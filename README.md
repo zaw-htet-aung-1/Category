@@ -23,6 +23,7 @@
 - php artisan db:seed --class=PostSeeder
 - php artisan db:seed
 - php artisan migrate:fresh --seed
+- php artisan make:migration add_user_id_to_posts_table --table=posts
 
 ## Model
 - Post::all()

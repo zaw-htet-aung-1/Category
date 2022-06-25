@@ -28,7 +28,14 @@
             {{-- {{ $post->created_at->toDateString() }} by Mark --}}
             {{-- {{ $post->created_at->toDateTimeString() }} by Mark --}}
             {{-- {{ $post->created_at->toFormattedDateString() }} by Mark --}}
-            {{ $post->created_at->diffForHumans() }} by Mark
+            <i>{{ $post->created_at->diffForHumans() }}</i> by 
+            <b> 
+                @php
+                            $userId = $post->user_id;
+                            $user = \App\Models\User::find($userId);
+                            echo $user->name;
+                @endphp
+            </b>
             <p>{{ $post->body }}</p>
             @auth
             <div class="d-flex justify-content-end">
