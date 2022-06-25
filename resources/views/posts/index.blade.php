@@ -47,6 +47,8 @@
     
         <hr>
     @endforeach
+
+    {{ $posts->links() }}
     
 </div>
 @endsection
