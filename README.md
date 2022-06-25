@@ -89,6 +89,5 @@
 ## Homework
 
 ```
-Login, Register - Validate and show old value
-change logout method get to post
+Join Post and User table and display user name in post list and detail
 ```
