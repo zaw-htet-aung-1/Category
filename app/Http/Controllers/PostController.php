@@ -10,19 +10,25 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // $request->search;
+        // $request->input('search');
+        // $request->get('search');
+        // $request->query('search'); // Get method only
+        // request('search');
+
         // $posts = Post::all();
-        // $posts = Post::paginate(3);
+        $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(3);
         // $posts = Post::select(['posts.*', 'users.name'])
         // ->join('users', 'users.id', '=', 'posts.user_id')
         // ->get()
         // ->toArray();
-        $posts = Post::select('posts.*', 'users.name as author')
-        ->join('users', 'users.id', '=', 'posts.user_id')
-        // ->simplePaginate(3);
-        ->orderBy('id', 'desc')
-        ->paginate(3);
+        // $posts = Post::select('posts.*', 'users.name as author')
+        // ->join('users', 'users.id', '=', 'posts.user_id')
+        // // ->simplePaginate(3);
+        // ->orderBy('id', 'desc')
+        // ->paginate(3);
 
         // $posts = DB::table('posts')->join('users', 'users.id', '=', 'posts.user_id')->first();
 

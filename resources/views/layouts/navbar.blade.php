@@ -15,6 +15,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/posts/create">Create A Post</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/my-posts">My Posts</a>
+                </li>
                 @endauth
                 @if(Auth::check())
                 <li class="nav-item dropdown">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MyPostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
@@ -48,4 +49,5 @@ Route::get('login', [LoginController::class, 'create']);
 Route::post('login', [LoginController::class, 'store']);
 Route::get('logout', [LoginController::class, 'destroy']);
 
+Route::get('my-posts', [MyPostController::class, 'index']);
 
