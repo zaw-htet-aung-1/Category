@@ -28,16 +28,10 @@
             {{-- {{ $post->created_at->toDateString() }} by Mark --}}
             {{-- {{ $post->created_at->toDateTimeString() }} by Mark --}}
             {{-- {{ $post->created_at->toFormattedDateString() }} by Mark --}}
-            <i>{{ $post->created_at->diffForHumans() }}</i> by 
-            <b> 
-                @php
-                            $userId = $post->user_id;
-                            $user = \App\Models\User::find($userId);
-                            echo $user->name;
-                @endphp
-            </b>
+            <i>{{ $post->created_at->diffForHumans() }}</i> by <b> {{ $post->author }} </b>
             <p>{{ $post->body }}</p>
-            @auth
+            {{-- @if(Auth::check() && $post->user_id == Auth::id()) --}}
+            @if($post->isOwnPost())
             <div class="d-flex justify-content-end">
                 <a href="/posts/{{ $post->id }}/edit/" class="btn btn-outline-success">Edit</a>
                 <form action="/posts/{{ $post->id }}"
@@ -49,7 +43,7 @@
                     <button type="submit" class="btn btn-outline-danger ms-2">Delete</button>
                 </form>
             </div>
-            @endauth
+            @endif
         </div>
     
         <hr>

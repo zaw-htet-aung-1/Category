@@ -6,13 +6,26 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use  App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
     public function index()
     {
         // $posts = Post::all();
-        $posts = Post::paginate(3);
+        // $posts = Post::paginate(3);
+        // $posts = Post::select(['posts.*', 'users.name'])
+        // ->join('users', 'users.id', '=', 'posts.user_id')
+        // ->get()
+        // ->toArray();
+        $posts = Post::select('posts.*', 'users.name as author')
+        ->join('users', 'users.id', '=', 'posts.user_id')
+        // ->simplePaginate(3);
+        ->orderBy('id', 'desc')
+        ->paginate(3);
+
+        // $posts = DB::table('posts')->join('users', 'users.id', '=', 'posts.user_id')->first();
+
 
         return view('posts.index', compact('posts'));
     }
@@ -24,18 +37,18 @@ class PostController extends Controller
 
     // use  App\Http\Requests\PostRequest;
     // use Illuminate\Support\Facades\Validator;
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required',
-            'body' => 'required',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'title' => 'required',
+        //     'body' => 'required',
+        // ]);
 
-        if($validator->fails()) {
-            return redirect('/posts/create')
-            ->withErrors($validator)
-            ->withInput();
-        }
+        // if($validator->fails()) {
+        //     return redirect('/posts/create')
+        //     ->withErrors($validator)
+        //     ->withInput();
+        // }
         // $this->myValidate($request);
         // Validate
         // $request->validate([
@@ -62,12 +75,13 @@ class PostController extends Controller
 
        
 
-        // Post::create([
-        //     'title' =>  $request->title,
-        //     'body' =>  $request->body,
-        // ]);
+        Post::create([
+            'title' =>  $request->title,
+            'body' =>  $request->body,
+            'user_id' => auth()->id(),
+        ]);
 
-        Post::create($request->only(['title', 'body']));
+        // Post::create($request->only(['title', 'body']));
 
         // $request->session()->flash('success', 'A post was created successfully.');
         // session()->flash('success', 'A post was created successfully.');
@@ -115,7 +129,17 @@ class PostController extends Controller
 
     public function show($id)
     {
-        $post = Post::find($id);
+        // $post = Post::find($id);
+        $post = Post::select(['posts.*', 'users.name as author'])
+        ->join('users', 'users.id', 'posts.user_id')
+        ->where('posts.id', $id)
+        ->first();
+        // ->find($id);
+
+
+        // ->where('posts.id', $id)
+        // ->first();
+
 
         return view('posts.show', compact('post'));
     }
