@@ -86,11 +86,18 @@ class PostController extends Controller
 
        
 
-        $post = Post::create([
-            'title' =>  $request->title,
-            'body' =>  $request->body,
-            'user_id' => auth()->id(),
-        ]);
+        // $post = Post::create([
+        //     'title' =>  $request->title,
+        //     'body' =>  $request->body,
+        //     'user_id' => auth()->id(),
+        // ]);
+
+        // $post = auth()->user()->posts()->create([
+        //     'title' =>  $request->title,
+        //     'body' =>  $request->body,
+        // ]);
+
+        $post = auth()->user()->posts()->create($request->only('title', 'body'));
 
         $post->categories()->attach($request->category_ids);
 
@@ -123,6 +130,7 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $post->update($request->only(['title', 'body']));
+
         $post->categories()->sync($request->category_ids);
         return redirect('/posts')->with('success', 'A post was updated successfully.');
 
