@@ -19,7 +19,8 @@ class PostController extends Controller
         // request('search');
 
         // $posts = Post::all();
-        $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(3);
+        $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'asc')->paginate(3);
+
         // $posts = Post::select(['posts.*', 'users.name'])
         // ->join('users', 'users.id', '=', 'posts.user_id')
         // ->get()

@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MyPostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Requests\CategoryRequest;
 
 // Route::get('/', [PostController::class, 'index']);
 
@@ -41,12 +42,13 @@ Route::patch('/posts/{id}', [PostController::class, 'update']);
 Route::get('/posts/{id}', [PostController::class, 'show']);
 Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('myauth');
 
-Route::get('/categories', [CategoryController::class, 'index'])->name('cateogry.index');
-Route::get('/categories/create', [CategoryController::class, 'create'])->name('cateogry.create');
-Route::post('/categories', [CategoryController::class, 'store'])->name('cateogry.store');
-Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('cateogry.edit');
-Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('cateogry.update');
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('cateogry.destroy');
+// Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
+// Route::get('/categories/create', [CategoryController::class, 'create'])->name('category.create');
+// Route::post('/categories', [CategoryController::class, 'store'])->name('category.store');
+// Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+// Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('category.update');
+// Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+Route::resource('category', CategoryController::class);
 
 // Route::resource('posts', PostController::class);
 
