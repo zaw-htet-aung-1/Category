@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use  App\Http\Requests\PostRequest;
+use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +20,7 @@ class PostController extends Controller
         // request('search');
 
         // $posts = Post::all();
-        $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'asc')->paginate(3);
+        $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(3);
 
         // $posts = Post::select(['posts.*', 'users.name'])
         // ->join('users', 'users.id', '=', 'posts.user_id')
@@ -39,13 +40,16 @@ class PostController extends Controller
 
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+
+        return view('posts.create', compact('categories'));
     }
 
     // use  App\Http\Requests\PostRequest;
     // use Illuminate\Support\Facades\Validator;
     public function store(PostRequest $request)
     {
+        // dd($request->all());
         // $validator = Validator::make($request->all(), [
         //     'title' => 'required',
         //     'body' => 'required',
@@ -82,11 +86,21 @@ class PostController extends Controller
 
        
 
-        Post::create([
+        $post = Post::create([
             'title' =>  $request->title,
             'body' =>  $request->body,
             'user_id' => auth()->id(),
         ]);
+
+        $post->categories()->attach($request->category_ids);
+
+        // foreach($request->category_ids as $categoryId) {
+        //     DB::table('category_post')->insert([
+        //         'post_id' => $post->id,
+        //         'category_id' => $categoryId,
+        //     ]);
+        // }
+
 
         // Post::create($request->only(['title', 'body']));
 
@@ -99,12 +113,19 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
+        $oldCategoryIds = $post->categories->pluck('id')->toArray();
+        $categories = Category::all();
 
-        return view('posts.edit', compact('post'));
+        return view('posts.edit', compact('post', 'categories', 'oldCategoryIds'));
     }
 
     public function update(PostRequest $request, $id)
     {
+        $post = Post::find($id);
+        $post->update($request->only(['title', 'body']));
+        $post->categories()->sync($request->category_ids);
+        return redirect('/posts')->with('success', 'A post was updated successfully.');
+
         // $this->myValidate($request);
         // $request->validate([
         //     'title' => 'required',
@@ -115,7 +136,7 @@ class PostController extends Controller
         //     'body.min' => 'အနည်းဆုံး ၅လုံးထည့်ပါ။'
         // ]);
 
-        $post = Post::find($id);
+        // $post = Post::find($id);
         // $post->title = request('title');
         // $post->body = request('body');
         // $post->title = $request->title;
@@ -127,11 +148,25 @@ class PostController extends Controller
         //     'title' => $request->title,
         //     'body' => $request->body,
         // ]);
-        $post->update($request->only(['title', 'body']));
+        // $post->update($request->only(['title', 'body']));
+
+        // $post->categories()->detach($post->categories->pluck('id')->toArray());
+        // $post->categories()->attach($request->category_ids);
+
+        // $post->categories()->sync($request->category_ids);
+
+        // DB::table('category_post')->where('post_id', $post->id)->delete();
+
+        // foreach($request->category_ids as $categoryId) {
+        //     DB::table('category_post')->insert([
+        //         'post_id' => $post->id,
+        //         'category_id' => $categoryId,
+        //     ]);
+        // }
 
         // session()->flash('success', 'A post was updated successfully.');
 
-        return redirect('/posts')->with('success', 'A post was updated successfully.');
+        // return redirect('/posts')->with('success', 'A post was updated successfully.');
     }
 
     public function show($id)
