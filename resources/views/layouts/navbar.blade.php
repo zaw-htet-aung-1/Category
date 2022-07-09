@@ -21,6 +21,9 @@
                 <li class="nav-item">
                     <a class="nav-link @if( request()->path() == 'my-posts') active @endif" href="/my-posts">My Posts</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('categories.create') }}">New Category</a>
+                </li>
                 @endauth
                 @if(Auth::check())
                 <li class="nav-item dropdown">
