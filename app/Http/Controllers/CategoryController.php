@@ -34,7 +34,7 @@ class CategoryController extends Controller
         ->paginate(5)
         ->withQueryString();
 
-        return view('categories.index', compact('categories'));
+        return view('categories.index', compact ('categories'));
     }
 
     /**
@@ -44,7 +44,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-       return view('categories.create');
+        return view('categories.create');
     }
 
     /**
@@ -55,8 +55,9 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        Category::create([
-            'name' => $request->name
+        $category = new Category();
+        $category->create([
+            'name' => $request->name,
         ]);
 
         return redirect('categories')->with('success', 'A category was created successfully.');
@@ -72,7 +73,8 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
 
-        return view('categories.edit', compact('category'));
+       
+        return view('categories.edit',compact('category'));
     }
 
     /**

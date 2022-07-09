@@ -10,7 +10,7 @@
                     <h3>Edit a category</h3>
                 </div>
                 <div class="card-body">
-                    <form action="/categories/{{ $category->id }}" method="POST">
+                    <form action="/categories/update{{ $category->id }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">

@@ -10,7 +10,7 @@
                     <h3>Create a category</h3>
                 </div>
                 <div class="card-body">
-                    <form action="/categories" method="POST">
+                    <form action="{{ route('categories.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Name</label>
