@@ -12,7 +12,7 @@
             @if (count($posts) > 0)
             @foreach ($posts as $post)
             <div class="card mb-3">
-                <img src="https://colorlibhub.com/sparkling/wp-content/uploads/sites/52/2014/01/city-landscape-slider-750x410.jpg"
+                <img src="{{ $post->image }}"
                     class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title h2">{{ $post->title }}</h5>

@@ -11,12 +11,13 @@ class Post extends Model
 {
     use HasFactory;
 
-    // protected $fillable = [
-    //     'title',
-    //     'body',
-    // ];
+    protected $fillable = [
+        'title',
+        'body',
+        'image',
+    ];
 
-    protected $guarded = [];
+    // protected $guarded = [];
 
     public function isOwnPost()
     {

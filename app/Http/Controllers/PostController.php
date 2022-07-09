@@ -49,7 +49,6 @@ class PostController extends Controller
     // use Illuminate\Support\Facades\Validator;
     public function store(PostRequest $request)
     {
-        // dd($request->all());
         // $validator = Validator::make($request->all(), [
         //     'title' => 'required',
         //     'body' => 'required',
@@ -96,6 +95,11 @@ class PostController extends Controller
         //     'title' =>  $request->title,
         //     'body' =>  $request->body,
         // ]);
+
+        $file = $request->file('image');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $dir = public_path('upload/images');
+        $file->move($dir, $filename);
 
         $post = auth()->user()->posts()->create($request->only('title', 'body'));
 

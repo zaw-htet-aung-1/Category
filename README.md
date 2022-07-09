@@ -89,19 +89,6 @@
 ## Homework
 
 ```
-category (CRUD)
-relation with post (join)
-
-# table 
-    categories
-        - id
-        - name
-        - created_at
-        - updated_at
-
-    category_post (pivot table, post_category_relations)
-        - post_id
-        - category_id
-
-    posts
+- store uploaded image path to posts table
+- display uploaded image in post list page and post detail page
 ```
