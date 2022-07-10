@@ -12,4 +12,9 @@ class Category extends Model
     // protected $fillable = ['name'];
 
     protected $guarded = [];
+
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class);
+    }
 }

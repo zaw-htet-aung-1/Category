@@ -10,19 +10,12 @@
                     <h3>Create a category</h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('categories.store') }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" value="{{ old('name') }}">
-                            @error('name')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                    <form action="{{ route('category.store') }}" method="POST">
+                        @include('categories._form')
 
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-outline-primary">Create</button>
-                            <a href="/categories" class="btn btn-outline-secondary">Back</a>
+                            <a href="{{ route('category.index') }}" class="btn btn-outline-secondary">Back</a>
                         </div>
                     </form>
                 </div>

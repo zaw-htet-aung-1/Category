@@ -12,7 +12,7 @@
             @if (count($posts) > 0)
             @foreach ($posts as $post)
             <div class="card mb-3">
-                <img src="https://colorlibhub.com/sparkling/wp-content/uploads/sites/52/2014/01/city-landscape-slider-750x410.jpg"
+                <img src="{{ $post->image }}"
                     class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title h2">{{ $post->title }}</h5>
@@ -27,6 +27,20 @@
                             class="bi bi-person-fill" viewBox="0 0 16 16">
                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
                         </svg> {{ $post->author->name }}
+                        {{-- @php
+                        $category_ids = DB::table('category_post')
+                        ->where('post_id', $post->id)
+                        ->get()
+                        ->pluck('category_id')
+                        ->toArray();
+
+                        $categories = \App\Models\Category::whereIn('id', $category_ids)->get();
+                        @endphp --}}
+                        {{-- @foreach ($categories as $category) --}}
+                        {{-- @foreach ($post->categories()->get() as $category) --}}
+                        @foreach ($post->categories as $category)
+                        <span class="badge text-bg-info">{{ $category->name }}</span>
+                        @endforeach
                     </p>
                     <p class="card-text text-muted">
                         {{ $post->body }}
@@ -47,7 +61,7 @@
                             </div>
                             @endif
                         </div>
-                        <a href="#" class="btn btn-primary text-uppercase">Read More</a>
+                        <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary text-uppercase">Read More</a>
                     </div>
                 </div>
             </div>
