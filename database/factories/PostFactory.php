@@ -23,6 +23,7 @@ class PostFactory extends Factory
             // 'user_id' => User::factory()->create()->id,
             // 'user_id' => User::where('id', rand(1, 5))->first()->id,
             'user_id' => User::inRandomOrder()->first()->id,
+            'image' => '/upload/images/1.jpg',
         ];
     }
 }

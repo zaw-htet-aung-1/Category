@@ -16,7 +16,7 @@
                     <a class="nav-link @if( request()->path() == 'posts/create') active @endif" href="/posts/create">Create a Post</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @if( request()->path() == 'categories/create') active @endif" href="{{ route('cateogry.create') }}">Create a category</a>
+                    <a class="nav-link @if( request()->path() == 'categories/create') active @endif" href="{{ route('category.create') }}">Create a category</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link @if( request()->path() == 'my-posts') active @endif" href="/my-posts">My Posts</a>

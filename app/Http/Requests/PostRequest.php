@@ -24,8 +24,10 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
+            'image' => 'required|file|mimes:jpg,jpeg,png',
             'title' => 'required',
-            'body' => 'required|min:5'
+            'body' => 'required|min:5',
+            'category_ids' => 'required|array'
         ];
     }
 
@@ -34,7 +36,8 @@ class PostRequest extends FormRequest
         return [
             // 'title.required' => 'ခေါင်းစဉ်ထည့်ပါ။',
             // 'body.required' => 'အကြောင်းအရာထည့်ပါ။',
-            // 'body.min' => 'အနည်းဆုံး ၅လုံးထည့်ပါ။'
+            // 'body.min' => 'အနည်းဆုံး ၅လုံးထည့်ပါ။',
+            'category_ids.required' => 'Choose one or more category.'
         ];
     }
 
