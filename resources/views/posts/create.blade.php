@@ -22,10 +22,14 @@
 
             <div class="mb-3">
                 <label class="form-label">Post Image</label>
-                <input class="form-control @error('image') is-invalid @enderror" type="file" name="image">
-                @error('image')
+                <input class="form-control @error('images') is-invalid @enderror @error('images.*') is-invalid @enderror" type="file" name="images[]" multiple>
+                @error('images')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+
+                @foreach($errors->get('images.*') as $message)
+                <div class="invalid-feedback">{{ $message[0] }}</div>
+                @endforeach
             </div>
 
             <div class="mb-3">

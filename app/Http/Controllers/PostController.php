@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use  App\Http\Requests\PostRequest;
 use App\Models\Category;
+use App\Models\PostImage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
@@ -49,6 +50,26 @@ class PostController extends Controller
     // use Illuminate\Support\Facades\Validator;
     public function store(PostRequest $request)
     {
+        $post = auth()->user()->posts()->create([
+            'title' => $request->title,
+            'body' => $request->body
+        ]);
+
+        // upload multiple image
+        foreach($request->file('images') as $file) {
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $dir = public_path('upload/images');
+            $file->move($dir, $filename);
+
+            PostImage::create([
+                'post_id' => $post->id,
+                'path' => '/upload/images/' . $filename,
+            ]);
+        }
+
+        $post->categories()->attach($request->category_ids);
+
+        return redirect('/posts')->with('success', 'A post was created successfully.');
         // $validator = Validator::make($request->all(), [
         //     'title' => 'required',
         //     'body' => 'required',
@@ -96,18 +117,8 @@ class PostController extends Controller
         //     'body' =>  $request->body,
         // ]);
 
-        $file = $request->file('image');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $dir = public_path('upload/images');
-        $file->move($dir, $filename);
-
-        $post = auth()->user()->posts()->create([
-            'title' => $request->title,
-            'body' => $request->body,
-            'image' => '/upload/images/' . $filename,
-        ]);
-
-        $post->categories()->attach($request->category_ids);
+        
+        
 
         // foreach($request->category_ids as $categoryId) {
         //     DB::table('category_post')->insert([
@@ -122,7 +133,7 @@ class PostController extends Controller
         // $request->session()->flash('success', 'A post was created successfully.');
         // session()->flash('success', 'A post was created successfully.');
 
-        return redirect('/posts')->with('success', 'A post was created successfully.');
+        // return redirect('/posts')->with('success', 'A post was created successfully.');
     }
 
     public function edit($id)
@@ -140,19 +151,28 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         // delete old image
-        unlink(public_path($post->image));
+        foreach($post->images as $image) {
+            unlink(public_path($image->path));
+            PostImage::where('post_id', $post->id)->delete();
+        }
 
         // upload a image
-        $file = $request->file('image');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $dir = public_path('upload/images');
-        $file->move($dir, $filename);
+        foreach($request->images as $file) {
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $dir = public_path('upload/images');
+            $file->move($dir, $filename);
+
+            PostImage::create([
+                'post_id' => $post->id,
+                'path' => '/upload/images/' . $filename,
+            ]);
+        }
 
         // update post
         $post->update([
             'title' => $request->title,
             'body' => $request->body,
-            'image' => '/upload/images/' . $filename,
+            // 'image' => '/upload/images/' . $filename,
         ]);
 
         $post->categories()->sync($request->category_ids);
