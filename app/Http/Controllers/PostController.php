@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
-use  App\Http\Requests\PostRequest;
 use App\Models\Category;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use  App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -96,14 +97,23 @@ class PostController extends Controller
         //     'body' =>  $request->body,
         // ]);
 
+       
+        //
         $file = $request->file('image');
         $filename = time() . '_' . $file->getClientOriginalName();
         $dir = public_path('upload/images');
         $file->move($dir, $filename);
 
         $post = auth()->user()->posts()->create($request->only('title', 'body'));
+        $post = auth()->user()->posts()->create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'user_id' =>Auth::id(),
+            'image' => '/upload/images/' . $filename,
+        ]);
 
         $post->categories()->attach($request->category_ids);
+        //
 
         // foreach($request->category_ids as $categoryId) {
         //     DB::table('category_post')->insert([
