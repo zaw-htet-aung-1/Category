@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
-use  App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\PostImage;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use  App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -58,12 +59,13 @@ class PostController extends Controller
         // upload multiple image
         foreach($request->file('images') as $file) {
             $filename = time() . '_' . $file->getClientOriginalName();
-            $dir = public_path('upload/images');
-            $file->move($dir, $filename);
+            $dir = '/upload/images';
+            // $file->move($dir, $filename);
+            $path = $file->storeAs($dir, $filename);
 
             PostImage::create([
                 'post_id' => $post->id,
-                'path' => '/upload/images/' . $filename,
+                'path' => $path,
             ]);
         }
 
@@ -152,7 +154,8 @@ class PostController extends Controller
 
         // delete old image
         foreach($post->images as $image) {
-            unlink(public_path($image->path));
+            // unlink(public_path($image->path));
+            Storage::delete($image->path);
             PostImage::where('post_id', $post->id)->delete();
         }
 
@@ -160,11 +163,11 @@ class PostController extends Controller
         foreach($request->images as $file) {
             $filename = time() . '_' . $file->getClientOriginalName();
             $dir = public_path('upload/images');
-            $file->move($dir, $filename);
+            $path = $file->storeAs($dir, $filename);
 
             PostImage::create([
                 'post_id' => $post->id,
-                'path' => '/upload/images/' . $filename,
+                'path' => $path,
             ]);
         }
 
