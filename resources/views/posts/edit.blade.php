@@ -16,10 +16,20 @@
         </ul>
         @endif --}}
 
-        <form action="/posts/{{ $post->id }}" method="POST">
+        <form action="/posts/{{ $post->id }}" method="POST" enctype="multipart/form-data">
             {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
             @csrf
             @method('PUT')
+
+            <div class="mb-3">
+                <label class="form-label">Post Image</label>
+                <input class="form-control @error('image') is-invalid @enderror" type="file" name="image">
+                @error('image')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <img src="{{ $post->image }}" alt="Post Image">
 
             <div class="mb-3">
                 <label class="form-label">Post Title</label>
