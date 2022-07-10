@@ -63,8 +63,11 @@ class PostController extends Controller
             // $file->move($dir, $filename);
             $path = $file->storeAs($dir, $filename);
 
-            PostImage::create([
-                'post_id' => $post->id,
+            // PostImage::create([
+            //     'post_id' => $post->id,
+            //     'path' => $path,
+            // ]);
+            $post->images()->create([
                 'path' => $path,
             ]);
         }
