@@ -16,10 +16,24 @@
         </ul>
         @endif --}}
 
-        <form action="/posts/{{ $post->id }}" method="POST">
+        <form action="/posts/{{ $post->id }}" method="POST" enctype="multipart/form-data">
             {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
             @csrf
             @method('PUT')
+
+            <div class="mb-3">
+                <label class="form-label">Post Image</label>
+                <input class="form-control @error('images') is-invalid @enderror @error('images.*') is-invalid @enderror" type="file" name="images[]" multiple>
+                @error('images')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+
+                @foreach($errors->get('images.*') as $message)
+                <div class="invalid-feedback">{{ $message[0] }}</div>
+                @endforeach
+            </div>
+
+            <img src="{{ $post->image }}" alt="Post Image">
 
             <div class="mb-3">
                 <label class="form-label">Post Title</label>

@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\PostImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use  App\Http\Requests\PostRequest;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -50,6 +51,30 @@ class PostController extends Controller
     // use Illuminate\Support\Facades\Validator;
     public function store(PostRequest $request)
     {
+        $post = auth()->user()->posts()->create([
+            'title' => $request->title,
+            'body' => $request->body
+        ]);
+
+        // upload multiple image
+        foreach($request->file('images') as $file) {
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $dir = '/upload/images';
+            // $file->move($dir, $filename);
+            $path = $file->storeAs($dir, $filename);
+
+            // PostImage::create([
+            //     'post_id' => $post->id,
+            //     'path' => $path,
+            // ]);
+            $post->images()->create([
+                'path' => $path,
+            ]);
+        }
+
+        $post->categories()->attach($request->category_ids);
+
+        return redirect('/posts')->with('success', 'A post was created successfully.');
         // $validator = Validator::make($request->all(), [
         //     'title' => 'required',
         //     'body' => 'required',
@@ -97,23 +122,8 @@ class PostController extends Controller
         //     'body' =>  $request->body,
         // ]);
 
-       
-        //
-        $file = $request->file('image');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $dir = public_path('upload/images');
-        $file->move($dir, $filename);
-
-        $post = auth()->user()->posts()->create($request->only('title', 'body'));
-        $post = auth()->user()->posts()->create([
-            'title' => $request->title,
-            'body' => $request->body,
-            'user_id' =>Auth::id(),
-            'image' => '/upload/images/' . $filename,
-        ]);
-
-        $post->categories()->attach($request->category_ids);
-        //
+        
+        
 
         // foreach($request->category_ids as $categoryId) {
         //     DB::table('category_post')->insert([
@@ -128,7 +138,7 @@ class PostController extends Controller
         // $request->session()->flash('success', 'A post was created successfully.');
         // session()->flash('success', 'A post was created successfully.');
 
-        return redirect('/posts')->with('success', 'A post was created successfully.');
+        // return redirect('/posts')->with('success', 'A post was created successfully.');
     }
 
     public function edit($id)
@@ -142,8 +152,34 @@ class PostController extends Controller
 
     public function update(PostRequest $request, $id)
     {
-        $post = Post::find($id);
-        $post->update($request->only(['title', 'body']));
+        // Get post by id
+        $post = Post::findOrFail($id);
+
+        // delete old image
+        foreach($post->images as $image) {
+            // unlink(public_path($image->path));
+            Storage::delete($image->path);
+            PostImage::where('post_id', $post->id)->delete();
+        }
+
+        // upload a image
+        foreach($request->images as $file) {
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $dir = public_path('upload/images');
+            $path = $file->storeAs($dir, $filename);
+
+            PostImage::create([
+                'post_id' => $post->id,
+                'path' => $path,
+            ]);
+        }
+
+        // update post
+        $post->update([
+            'title' => $request->title,
+            'body' => $request->body,
+            // 'image' => '/upload/images/' . $filename,
+        ]);
 
         $post->categories()->sync($request->category_ids);
         return redirect('/posts')->with('success', 'A post was updated successfully.');
