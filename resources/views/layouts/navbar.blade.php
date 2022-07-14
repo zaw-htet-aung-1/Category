@@ -27,10 +27,12 @@
                 @endauth
                 @if(Auth::check())
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="/images/avatar.png" alt="" style=" width: 30px; margin-right: 10px; ">
-                        {{ Auth::user()->name }}
+                    <a class="nav-link fw-bold dropdown-toggle @if(request()->url() == route('profile')) active @endif" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        @if( auth()->user()->profile_image )
+                        <img src="{{ Storage::url(auth()->user()->profile_image->path)}}" class="img-fluid rounded-circle ms-1" style="width:32px; height:32px; object-fit:cover;" alt="Profile Avater">
+                    @else
+                        <img src="/storage/images/profile_avater_small.png" class="img-fluid rounded-circle ms-1" style="width:32px; height:32px; object-fit:cover;" alt="Profile Avater">
+                    @endif
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -39,10 +41,10 @@
                 </li>
                 @else
                 <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link @if(request()->url() == route('register.create')) active @endif" href="{{route('register.create')}}">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link @if(request()->url() == route('login.create')) active @endif" href="{{route('login.create')}}">Login</a>
                 </li>
                 @endif
             </ul>

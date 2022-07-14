@@ -8,6 +8,7 @@ use App\Models\PostImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use  App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,6 +25,8 @@ class PostController extends Controller
         // $posts = Post::all();
         $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(3);
 
+        $user = Auth::user()->first();
+
         // $posts = Post::select(['posts.*', 'users.name'])
         // ->join('users', 'users.id', '=', 'posts.user_id')
         // ->get()
@@ -37,7 +40,7 @@ class PostController extends Controller
         // $posts = DB::table('posts')->join('users', 'users.id', '=', 'posts.user_id')->first();
 
 
-        return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts','user'));
     }
 
     public function create()

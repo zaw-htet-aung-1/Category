@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Requests\CategoryRequest;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MyPostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Requests\CategoryRequest;
 
 // Route::get('/', [PostController::class, 'index']);
 
@@ -60,4 +61,9 @@ Route::post('login', [LoginController::class, 'store']);
 Route::get('logout', [LoginController::class, 'destroy']);
 
 Route::get('my-posts', [MyPostController::class, 'index']);
+
+//Profile
+Route::get('/profile',[ProfileController::class,'index'])->name('profile');
+Route::get('/profile/edit',[ProfileController::class,'edit'])->name('profile.edit');
+Route::post('/profile/update',[ProfileController::class,'update'])->name('profile.update');
 
