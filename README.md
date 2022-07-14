@@ -89,6 +89,7 @@
 ## Homework
 
 ```
-- store uploaded image path to posts table
-- display uploaded image in post list page and post detail page
+# Profile
+- can be change name, email, password, image
+- use storage to file upload
 ```
