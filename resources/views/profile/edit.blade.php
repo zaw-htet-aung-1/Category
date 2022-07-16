@@ -5,7 +5,9 @@
 @section('styles')
 <style>
     .profile {
+        object-fit: contain;
         width: 100px;
+        height: 100px;
         border: 3px solid #1a7def;
         border-radius: 100%;
     }
@@ -65,7 +67,7 @@
 
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-outline-primary">Update</button>
-                <a href="/" class="btn btn-outline-secondary">Back</a>
+                <a href="{{ route('profile.show') }}" class="btn btn-outline-secondary">Back</a>
             </div>
         </form>
     </div>
