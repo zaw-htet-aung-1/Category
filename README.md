@@ -24,6 +24,7 @@
 - php artisan db:seed
 - php artisan migrate:fresh --seed
 - php artisan make:migration add_user_id_to_posts_table --table=posts
+- php artisan make:controller API\CategoryController --api
 
 ## Model
 - Post::all()
@@ -86,10 +87,43 @@
 - Factory
 - Seeder
 
+# HTTP Status Code
+
+```
+200 - Success
+201 - Created
+301,302 - Redirect
+400 - General Clint Error
+401 - Unauthorized (check login or not)
+403 - Forbidden (login && permission)
+404 - Page Not Found
+422 - Validation Error
+500 - Server Error 
+
+more detail -> https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+```
+
 ## Homework
 
 ```
-# Profile
-- can be change name, email, password, image
-- use storage to file upload
+RESTful API (CRUD)
+# products
+- id
+- name (string)
+- price (int)
+- created_at
+- updated_at
+
+
+## Response format
+- Get all products
+[
+    {
+        "id": "x",
+        "name": "x",
+        "price": "1,500",
+        "created_at"
+    },
+    ...
+]
 ```
