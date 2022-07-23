@@ -24,3 +24,6 @@ Route::get('posts/{id}', function($id) {
 // Route::delete('category/{id}', [CategoryController::class, 'destory']);
 
 Route::apiResource('category', CategoryController::class);
+
+// Product
+Route::apiResource('product',ProductController::class);
