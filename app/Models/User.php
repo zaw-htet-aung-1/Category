@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Image;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -61,5 +63,18 @@ class User extends Authenticatable
     public function latestPosts()
     {
         return $this->myPosts()->orderBy('id', 'desc')->paginate();
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function photo()
+    {
+        if($this->image) {
+            return Storage::url($this->image->path);
+        }
+        return url('/images/avatar.png');
     }
 }

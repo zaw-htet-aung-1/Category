@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MyPostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\RegisterController;
 
 // Route::get('/', [PostController::class, 'index']);
@@ -56,14 +57,25 @@ Route::resource('category', CategoryController::class);
 Route::get('register', [RegisterController::class, 'create']);
 Route::post('register', [RegisterController::class, 'store']);
 
-Route::get('login', [LoginController::class, 'create']);
+Route::get('login', [LoginController::class, 'create'])->name('login');
 Route::post('login', [LoginController::class, 'store']);
 Route::get('logout', [LoginController::class, 'destroy']);
 
 Route::get('my-posts', [MyPostController::class, 'index']);
 
+<<<<<<< HEAD
+Route::middleware('auth')->group(function() {
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('change-password', [ChangePasswordController::class, 'edit'])->name('change_password.edit');
+    Route::post('change-password', [ChangePasswordController::class, 'update'])->name('change_password.update');
+});
+=======
 //Profile
 Route::get('/profile',[ProfileController::class,'index'])->name('profile');
 Route::get('/profile/edit',[ProfileController::class,'edit'])->name('profile.edit');
 Route::post('/profile/update',[ProfileController::class,'update'])->name('profile.update');
 
+>>>>>>> b0f0ea487b478bd7fd17ddb1d0281528e44a2dab

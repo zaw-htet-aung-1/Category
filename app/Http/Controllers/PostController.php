@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
+use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\Category;
-use App\Models\PostImage;
+use App\Models\Image;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use  App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -23,7 +24,6 @@ class PostController extends Controller
         // request('search');
 
         // $posts = Post::all();
-        $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(3);
 
         $user = Auth::user()->first();
 
@@ -39,6 +39,7 @@ class PostController extends Controller
 
         // $posts = DB::table('posts')->join('users', 'users.id', '=', 'posts.user_id')->first();
 
+        $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(3);
 
         return view('posts.index', compact('posts','user'));
     }
@@ -52,15 +53,15 @@ class PostController extends Controller
 
     // use  App\Http\Requests\PostRequest;
     // use Illuminate\Support\Facades\Validator;
-    public function store(PostRequest $request)
+    public function store(PostStoreRequest $request)
     {
         $post = auth()->user()->posts()->create([
             'title' => $request->title,
-            'body' => $request->body
+            'body' => $request->body,
         ]);
 
         // upload multiple image
-        foreach($request->file('images') as $file) {
+        foreach ($request->file('images') as $file) {
             $filename = time() . '_' . $file->getClientOriginalName();
             $dir = '/upload/images';
             // $file->move($dir, $filename);
@@ -112,8 +113,6 @@ class PostController extends Controller
         // $post->updated_at = now();
         // $post->save();
 
-       
-
         // $post = Post::create([
         //     'title' =>  $request->title,
         //     'body' =>  $request->body,
@@ -125,16 +124,12 @@ class PostController extends Controller
         //     'body' =>  $request->body,
         // ]);
 
-        
-        
-
         // foreach($request->category_ids as $categoryId) {
         //     DB::table('category_post')->insert([
         //         'post_id' => $post->id,
         //         'category_id' => $categoryId,
         //     ]);
         // }
-
 
         // Post::create($request->only(['title', 'body']));
 
@@ -153,28 +148,35 @@ class PostController extends Controller
         return view('posts.edit', compact('post', 'categories', 'oldCategoryIds'));
     }
 
-    public function update(PostRequest $request, $id)
+    public function update(PostUpdateRequest $request, $id)
     {
         // Get post by id
         $post = Post::findOrFail($id);
 
-        // delete old image
-        foreach($post->images as $image) {
-            // unlink(public_path($image->path));
-            Storage::delete($image->path);
-            PostImage::where('post_id', $post->id)->delete();
-        }
+        if ($request->hasFile('images')) {
+            // delete old image
+            foreach ($post->images as $image) {
+                // unlink(public_path($image->path));
+                Storage::delete($image->path);
+                Image::where('imageable_id', $post->id)->where('imageable_type', Post::class)->delete();
+                // PostImage::where('post_id', $post->id)->delete();
+            }
+            // upload a image
+            foreach ($request->images as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                // $dir = public_path('upload/images');
+                $dir = 'upload/images';
+                $path = $file->storeAs($dir, $filename);
 
-        // upload a image
-        foreach($request->images as $file) {
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $dir = public_path('upload/images');
-            $path = $file->storeAs($dir, $filename);
+                $post->images()->create([
+                    'path' => $path,
+                ]);
 
-            PostImage::create([
-                'post_id' => $post->id,
-                'path' => $path,
-            ]);
+                // PostImage::create([
+                //     'post_id' => $post->id,
+                //     'path' => $path,
+                // ]);
+            }
         }
 
         // update post
@@ -234,15 +236,13 @@ class PostController extends Controller
     {
         // $post = Post::find($id);
         $post = Post::select(['posts.*', 'users.name as author'])
-        ->join('users', 'users.id', 'posts.user_id')
-        ->where('posts.id', $id)
-        ->first();
+            ->join('users', 'users.id', 'posts.user_id')
+            ->where('posts.id', $id)
+            ->first();
         // ->find($id);
-
 
         // ->where('posts.id', $id)
         // ->first();
-
 
         return view('posts.show', compact('post'));
     }

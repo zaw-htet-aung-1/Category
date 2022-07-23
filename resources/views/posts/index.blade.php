@@ -45,7 +45,8 @@
                         @endforeach
                     </p>
                     <p class="card-text text-muted">
-                        {{ $post->body }}
+                        {{ Str::limit($post->body, 120, '.....') }}
+                        {{-- {{ substr($post->body, 0, 200) }} @if(strlen($post->body) > 200) ... @endif --}}
                     </p>
                     <div class="d-flex justify-content-between">
                         <div>
@@ -71,6 +72,8 @@
             @else
             <p>No Post.</p>
             @endif
+
+            {{ $posts->links() }}
         </div>
 
         <!-- Sidebar -->

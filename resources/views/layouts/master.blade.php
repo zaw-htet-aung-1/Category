@@ -12,6 +12,8 @@
                 color: #0B5ED7;
             }
         </style>
+
+        @yield('styles')
 </head>
 
 <body style="background: #f2f2f2;">
