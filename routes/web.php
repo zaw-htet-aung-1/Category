@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Requests\CategoryRequest;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MyPostController;
@@ -62,6 +63,7 @@ Route::get('logout', [LoginController::class, 'destroy']);
 
 Route::get('my-posts', [MyPostController::class, 'index']);
 
+<<<<<<< HEAD
 Route::middleware('auth')->group(function() {
     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -70,3 +72,10 @@ Route::middleware('auth')->group(function() {
     Route::get('change-password', [ChangePasswordController::class, 'edit'])->name('change_password.edit');
     Route::post('change-password', [ChangePasswordController::class, 'update'])->name('change_password.update');
 });
+=======
+//Profile
+Route::get('/profile',[ProfileController::class,'index'])->name('profile');
+Route::get('/profile/edit',[ProfileController::class,'edit'])->name('profile.edit');
+Route::post('/profile/update',[ProfileController::class,'update'])->name('profile.update');
+
+>>>>>>> b0f0ea487b478bd7fd17ddb1d0281528e44a2dab

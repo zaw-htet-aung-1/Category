@@ -64,7 +64,7 @@
                             </div>
                             @endif
                         </div>
-                        <a href="#" class="btn btn-primary text-uppercase">Read More</a>
+                        <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary text-uppercase">Read More</a>
                     </div>
                 </div>
             </div>

@@ -8,6 +8,9 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use  App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -21,6 +24,8 @@ class PostController extends Controller
         // request('search');
 
         // $posts = Post::all();
+
+        $user = Auth::user()->first();
 
         // $posts = Post::select(['posts.*', 'users.name'])
         // ->join('users', 'users.id', '=', 'posts.user_id')
@@ -36,7 +41,7 @@ class PostController extends Controller
 
         $posts = Post::where('title', 'like', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(3);
 
-        return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts','user'));
     }
 
     public function create()

@@ -1,76 +1,49 @@
 @extends('layouts.master')
 
-@section('title', 'Pofile | ' . auth()->user()->name)
-
-@section('styles')
-<style>
-    .profile {
-        object-fit: contain;
-        width: 100px;
-        height: 100px;
-        border: 3px solid #1a7def;
-        border-radius: 100%;
-    }
-</style>
+@section('title')
+Edit Profile
 @endsection
 
 @section('content')
+<div class="container w-50 bg-light rounded mt-3 justigy-content-center">
+    <h4 class="text-center p-3">Edit Profile</h4>
 
-<div class="card">
-    <div class="card-header">
-        <h3>Profile</h3>
-    </div>
-    <div class="card-body">
+    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-        @include('common.alert')
+        <div class="mt-3 mb-3">
+            <label for="image" class="form-label">Image Upload</label>
+            <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+            @error('image')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
-            @csrf
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" name="name" value="{{ old('name', auth()->user()->name )}}" placeholder="Enter Your Name">
+            @error('name')
+            <p style="color:red">{{ $message }}</p>
+            @enderror
+        </div>
 
-            {{-- @if(auth()->user()->image)
-                <img class="profile" src="{{ Storage::url(auth()->user()->image->path) }}" alt="Profile Image">
-            @else
-                <img class="profile" src="{{ url('/images/avatar.png') }}" alt="Profile Image">
-            @endif --}}
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" name="email" value="{{ old('email', auth()->user()->email )}}" placeholder="Enter Your Email">
+            @error('email')
+            <p style="color:red">{{ $message }}</p>
+            @enderror
+        </div>
 
-            <img class="profile" src="{{ auth()->user()->photo() }}" alt="Profile Image">
+        <div class="mb-3">
+            <label for="password" class="form-label">Password ( *Optional )</label>
+            <input type="text" class="form-control" name="password" placeholder="Change Your Password">
+            @error('password')
+            <p style="color:red">{{ $message }}</p>
+            @enderror
+        </div>
 
-            <div class="mb-3">
-                <label class="form-label">Post Image</label>
-                <input class="form-control @error('image') is-invalid @enderror" type="file" name="image">
-                @error('image')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Name</label>
-                <input class="form-control @error('name') is-invalid @enderror" 
-                    type="text" 
-                    name="name" 
-                    value="{{ old('name', auth()->user()->name) }}">
-                @error('name')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input class="form-control @error('email') is-invalid @enderror" 
-                type="email" 
-                name="email" 
-                value="{{ old('email', auth()->user()->email) }}">
-                @error('email')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-outline-primary">Update</button>
-                <a href="{{ route('profile.show') }}" class="btn btn-outline-secondary">Back</a>
-            </div>
-        </form>
-    </div>
+        <button type="submit" class="btn btn-danger">Update</button>
+        <a href="{{route('home')}}" class="btn btn-secondary">Cancle</a>
+    </form>
 </div>
-
-@endsection

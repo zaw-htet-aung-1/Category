@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
-
-    public function show()
+    public function index()
     {
-        return view('profile.show');
+        return view('profile.index');
     }
 
     public function edit()
@@ -19,31 +21,57 @@ class ProfileController extends Controller
         return view('profile.edit');
     }
 
-    public function update(ProfileUpdateRequest $request)
+    public function update(Request $request)
     {
-        $user = auth()->user();
 
-        if($request->hasFile('image')) {
-            // delete old image
-            if($user->image) {
-                Storage::delete($user->image->path);
-            }
-            $user->image()->delete();
+        $validator = Validator::make($request->all(),[
+            'name' => 'required',
+            'email' => 'required',
+        ]);
 
-            // upload new image
-            $path = $request->file('image')->store('upload/images');
-            $user->image()->create(['path' => $path]);
-            // Image::create([
-            //     'path' => $path,
-            //     'imageable' => auth()->id(),
-            //     'imageable_type' => User::class
-            // ]);
+        if($validator->fails()){
+            return redirect(route('profile.edit'))
+            ->withErrors($validator)
+            ->withInput();
         }
 
-        $user->update($request->only('name', 'email'));
 
-        // session()->flash('success', 'A profile was updated successfully.');
-        return to_route('profile.show')->with('success', 'A profile was updated successfully.'); // only work on laravel 9
-        // return redirect()->to('profile.edit');
+        // Update User Data
+        $user = Auth::user();
+        if( $request->name){
+            $user->name = $request->name;
+        }
+        if( $request->email){
+            $user->email = $request->email;
+        }
+        if( $request->password){
+            $user->password = bcrypt($request->password);
+        }
+        $user->save();
+
+        // Update Profile Image
+        if( $request->file('image')){
+
+            // Delete User Has Old Profile Image
+            if( $user->profile_image){
+                Storage::delete($user->profile_image->path);
+                Image::where('imageable_id', $user->id)->delete();
+            }
+
+            // Upload New Profile image
+            $file = $request->file('image');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $dir = '/upload/'.$user->id;
+
+            $path = $file->storeAs($dir, $filename);
+
+            Image::create([
+                'imageable_id' => $user->id,
+                'imageable_type' => 'User',
+                'path' => $path,
+            ]);
+        }
+
+        return redirect(route('profile'));
     }
 }
